@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import ICar from '../Interfaces/ICar';
 import CarService from '../Services/car.service';
 
+const invalidId = 'Invalid mongo id';
 class CarController {
   private req: Request;
   private res: Response;
@@ -39,10 +40,10 @@ class CarController {
     }
   }
 
-  public async listAllCars() {
+  public async getAllCars() {
     try {
-      const carsList = await this.service.listCars();
-      return this.res.status(200).json(carsList);
+      const allCars = await this.service.getAllCars();
+      return this.res.status(200).json(allCars);
     } catch (error) {
       this.next(error);
     }
@@ -57,8 +58,27 @@ class CarController {
       }
       return this.res.status(200).json(validCar);
     } catch (error: unknown) {
-      if (error instanceof Error && error.message === 'Invalid mongo id') {
-        return this.res.status(422).json({ message: 'Invalid mongo id' });
+      if (error instanceof Error && error.message === invalidId) {
+        return this.res.status(422).json({ message: invalidId });
+      }
+      return this.next(error);
+    }
+  }
+
+  public async updateCarById(req: Request, res: Response) {
+    try {
+      const carUpdate = req.body;
+      const { id } = req.params;
+      const newCar = new CarService();
+      const car = await newCar.updateById(id, carUpdate);
+      const validCar = await this.service.getCarById(id);
+      if (!validCar) {
+        return this.res.status(404).json({ message: 'Car not found' });
+      }
+      return res.status(200).json(car);
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === invalidId) {
+        return this.res.status(422).json({ message: invalidId });
       }
       return this.next(error);
     }

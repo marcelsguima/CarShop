@@ -22,11 +22,22 @@ export default class CarODM {
     return this.model.create({ ...car });
   }
   
-  public async listallCars() {
+  public async getAllCars() {
     return this.model.find();
   }
 
   public async getCarById(id: string) {
     return this.model.findById(id);
+  }
+
+  public async updateById(id: string, carUpdate: Partial<ICar>): Promise <ICar | null> {
+    const car = await this.model.findByIdAndUpdate(id, carUpdate, { new: true });
+    
+    if (car) {
+      const { _id, __v, ...updatedCar } = car.toObject();
+      return { id: _id.toString(), ...updatedCar };
+    }
+    
+    return null;
   }
 }
