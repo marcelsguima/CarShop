@@ -43,7 +43,7 @@ describe('Service', function () {
       ];
       sinon.stub(Model, 'find').resolves(car);
       
-      const result = await service.listCars();
+      const result = await service.getAllCars();
 
       expect(result).to.be.deep.equal(car);
     });

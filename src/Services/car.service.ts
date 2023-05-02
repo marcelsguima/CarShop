@@ -36,17 +36,10 @@ class CarService {
     return this.createCarDomain(car as ICar);
   }
 
-  public async updateById(id: string, carUpdate: Partial<ICar>): Promise <ICar | null> {
-    const updateCar = new CarODM();
-    const validCarId = isValidObjectId(id);
-    if (!validCarId) {
-      throw new Error('Invalid mongo id');
-    }
-    const car = await updateCar.updateById(id, carUpdate);
-    if (!car) {
-      return null;
-    }
-    return car;
+  public async updateById(id: string, car:ICar): Promise<Car | null> {
+    const carODM = new CarODM();    
+    const update = await carODM.updateById(id, car);
+    return this.createCarDomain(update);
   }
 }
 export default CarService;
