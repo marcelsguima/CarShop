@@ -54,7 +54,7 @@ class MotorcycleController {
     try {
       const validMotorcycle = await this.service.getMotorcycleById(id);
       if (!validMotorcycle) {
-        return this.res.status(404).json({ message: "Motorcycle not found" });
+        return this.res.status(404).json({ message: 'Motorcycle not found' });
       }
       return this.res.status(200).json(validMotorcycle);
     } catch (error: unknown) {
@@ -73,7 +73,7 @@ class MotorcycleController {
       const car = await newCar.updateById(id, carUpdate);
       const validCar = await this.service.getMotorcycleById(id);
       if (!validCar) {
-        return this.res.status(404).json({ message: "Motorcycle not found" });
+        return this.res.status(404).json({ message: 'Motorcycle not found' });
       }
       return res.status(200).json(car);
     } catch (error: unknown) {
